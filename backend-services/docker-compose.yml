@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  post_app:
+    container_name: post-backend
+    build:
+      context: ./post-backend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db_backend_services
+    restart: unless-stopped
+
+  comment_app:
+    container_name: comment-backend
+    build:
+      context: ./comment-backend
+      dockerfile: Dockerfile
+    ports:
+      - "4001:4001"
+    depends_on:
+      - db_backend_services
+    restart: unless-stopped
+
+  db_backend_services:
+    container_name: db_backend_services
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    volumes:
+      - ./database/postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    restart: unless-stopped
+
+volumes:
+  db_backend_services:
