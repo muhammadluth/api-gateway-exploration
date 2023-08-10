@@ -44,6 +44,7 @@ services:
       - "9092:9092/tcp"
     networks:
       apisix:
+      api_gateway_network:
 
   etcd:
     image: bitnami/etcd:3.4.15
@@ -84,31 +85,33 @@ services:
     networks:
       apisix:
 
-  prometheus:
-    image: prom/prometheus:v2.25.0
-    restart: always
-    volumes:
-      - ./prometheus_conf/prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
-    networks:
-      apisix:
+  # prometheus:
+  #   image: prom/prometheus:v2.25.0
+  #   restart: always
+  #   volumes:
+  #     - ./prometheus_conf/prometheus.yml:/etc/prometheus/prometheus.yml
+  #   ports:
+  #     - "9090:9090"
+  #   networks:
+  #     apisix:
 
-  grafana:
-    image: grafana/grafana:7.3.7
-    restart: always
-    ports:
-      - "3000:3000"
-    volumes:
-      - "./grafana_conf/provisioning:/etc/grafana/provisioning"
-      - "./grafana_conf/dashboards:/var/lib/grafana/dashboards"
-      - "./grafana_conf/config/grafana.ini:/etc/grafana/grafana.ini"
-    networks:
-      apisix:
+  # grafana:
+  #   image: grafana/grafana:7.3.7
+  #   restart: always
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - "./grafana_conf/provisioning:/etc/grafana/provisioning"
+  #     - "./grafana_conf/dashboards:/var/lib/grafana/dashboards"
+  #     - "./grafana_conf/config/grafana.ini:/etc/grafana/grafana.ini"
+  #   networks:
+  #     apisix:
 
 networks:
   apisix:
     driver: bridge
+  api_gateway_network:
+    external: true
 
 volumes:
   etcd_data:

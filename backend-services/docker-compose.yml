@@ -8,6 +8,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4000:4000"
+    networks:
+      - api_gateway_network
     depends_on:
       - db_backend_services
     restart: unless-stopped
@@ -19,6 +21,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4001:4001"
+    networks:
+      - api_gateway_network
     depends_on:
       - db_backend_services
     restart: unless-stopped
@@ -42,3 +46,8 @@ services:
 
 volumes:
   db_backend_services:
+
+
+networks:
+  api_gateway_network:
+    external: true

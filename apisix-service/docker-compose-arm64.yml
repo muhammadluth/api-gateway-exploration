@@ -43,6 +43,7 @@ services:
       - "9092:9092/tcp"
     networks:
       apisix:
+      api_gateway_network:
 
   etcd:
     image: rancher/coreos-etcd:v3.4.15-arm64
@@ -89,3 +90,5 @@ services:
 networks:
   apisix:
     driver: bridge
+  api_gateway_network:
+    external: true

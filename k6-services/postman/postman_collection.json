@@ -1,0 +1,1836 @@
+{
+	"info": {
+		"_postman_id": "1d4f96a1-1abb-4601-b3a7-dec8cd5dd0d5",
+		"name": "API Gateway",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3426604",
+		"_collection_link": "https://warped-robot-8962.postman.co/workspace/Learn~3c0fe7b7-5a3c-4fe9-acbb-3fec39296fc1/collection/3426604-1d4f96a1-1abb-4601-b3a7-dec8cd5dd0d5?action=share&creator=3426604&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "BACKEND",
+			"item": [
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Create Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const title = pm.variables.replaceIn('{{$randomUserName}}')",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"title\": `POST ${title}`,",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.create.post.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.create.post.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.post-be}}/post",
+									"host": [
+										"{{base_url.post-be}}"
+									],
+									"path": [
+										"post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJSON = pm.response.json()",
+											"",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Save Latest Response\", function () {",
+											"    const post = responseJSON.results[0]",
+											"    if (post.id !== \"\") {",
+											"        pm.environment.set(\"backend.get.post.response-body.latest\", JSON.stringify(post))",
+											"    }",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.post-be}}/post",
+									"host": [
+										"{{base_url.post-be}}"
+									],
+									"path": [
+										"post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Post Detail",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.post.response-body.latest.id\", post.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.post-be}}/post/:id",
+									"host": [
+										"{{base_url.post-be}}"
+									],
+									"path": [
+										"post",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.post.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.post.response-body.latest.id\", post.id)",
+											"",
+											"",
+											"const title = pm.variables.replaceIn('{{$randomUserName}}')",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"title\": `POST ${title}`,",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.update.post.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.update.post.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.post-be}}/post/:id",
+									"host": [
+										"{{base_url.post-be}}"
+									],
+									"path": [
+										"post",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.post.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.post.response-body.latest.id\", post.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.post-be}}/post/:id",
+									"host": [
+										"{{base_url.post-be}}"
+									],
+									"path": [
+										"post",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.post.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "COMMENT",
+					"item": [
+						{
+							"name": "Create Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"post_id\": post.id,",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.create.comment.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.create.comment.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.comment-be}}/comment",
+									"host": [
+										"{{base_url.comment-be}}"
+									],
+									"path": [
+										"comment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJSON = pm.response.json()",
+											"",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Save Latest Response\", function () {",
+											"    const comment = responseJSON.results[0]",
+											"    if (comment.id !== \"\") {",
+											"        pm.environment.set(\"backend.get.comment.response-body.latest\", JSON.stringify(comment))",
+											"    }",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.comment-be}}/comment",
+									"host": [
+										"{{base_url.comment-be}}"
+									],
+									"path": [
+										"comment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Comment Detail",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const comment = JSON.parse(pm.environment.get(\"backend.get.comment.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.comment.response-body.latest.id\", comment.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.comment-be}}/comment/:id",
+									"host": [
+										"{{base_url.comment-be}}"
+									],
+									"path": [
+										"comment",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.comment.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const comment = JSON.parse(pm.environment.get(\"backend.get.comment.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.comment.response-body.latest.id\", comment.id)",
+											"",
+											"",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.update.comment.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.update.comment.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.comment-be}}/comment/:id",
+									"host": [
+										"{{base_url.comment-be}}"
+									],
+									"path": [
+										"comment",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.comment.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const comment = JSON.parse(pm.environment.get(\"backend.get.comment.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.comment.response-body.latest.id\", comment.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.comment-be}}/comment/:id",
+									"host": [
+										"{{base_url.comment-be}}"
+									],
+									"path": [
+										"comment",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.comment.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Sign-In",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url.be}}/api/v1/auth/sign-in",
+							"host": [
+								"{{base_url.be}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "KONG BACKEND",
+			"item": [
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Create Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const title = pm.variables.replaceIn('{{$randomUserName}}')",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"title\": `POST ${title}`,",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.create.post.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.create.post.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.kong}}/api/v1/post",
+									"host": [
+										"{{base_url.kong}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJSON = pm.response.json()",
+											"",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Save Latest Response\", function () {",
+											"    const post = responseJSON.results[0]",
+											"    if (post.id !== \"\") {",
+											"        pm.environment.set(\"backend.get.post.response-body.latest\", JSON.stringify(post))",
+											"    }",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.kong}}/api/v1/post",
+									"host": [
+										"{{base_url.kong}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Post Detail",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.post.response-body.latest.id\", post.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.kong}}/api/v1/post/:id",
+									"host": [
+										"{{base_url.kong}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"post",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.post.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.post.response-body.latest.id\", post.id)",
+											"",
+											"",
+											"const title = pm.variables.replaceIn('{{$randomUserName}}')",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"title\": `POST ${title}`,",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.update.post.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.update.post.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.kong}}/api/v1/post/:id",
+									"host": [
+										"{{base_url.kong}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"post",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.post.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.post.response-body.latest.id\", post.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.kong}}/api/v1/post/:id",
+									"host": [
+										"{{base_url.kong}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"post",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.post.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "COMMENT",
+					"item": [
+						{
+							"name": "Create Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"post_id\": post.id,",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.create.comment.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.create.comment.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.kong}}/api/v1/comment",
+									"host": [
+										"{{base_url.kong}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"comment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJSON = pm.response.json()",
+											"",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Save Latest Response\", function () {",
+											"    const comment = responseJSON.results[0]",
+											"    if (comment.id !== \"\") {",
+											"        pm.environment.set(\"backend.get.comment.response-body.latest\", JSON.stringify(comment))",
+											"    }",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.kong}}/api/v1/comment",
+									"host": [
+										"{{base_url.kong}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"comment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Comment Detail",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const comment = JSON.parse(pm.environment.get(\"backend.get.comment.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.comment.response-body.latest.id\", comment.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.kong}}/api/v1/comment/:id",
+									"host": [
+										"{{base_url.kong}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"comment",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.comment.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const comment = JSON.parse(pm.environment.get(\"backend.get.comment.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.comment.response-body.latest.id\", comment.id)",
+											"",
+											"",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.update.comment.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.update.comment.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.kong}}/api/v1/comment/:id",
+									"host": [
+										"{{base_url.kong}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"comment",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.comment.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const comment = JSON.parse(pm.environment.get(\"backend.get.comment.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.comment.response-body.latest.id\", comment.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.kong}}/api/v1/comment/:id",
+									"host": [
+										"{{base_url.kong}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"comment",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.comment.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Sign-In",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url.be}}/api/v1/auth/sign-in",
+							"host": [
+								"{{base_url.be}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "APISIX BACKEND",
+			"item": [
+				{
+					"name": "POST",
+					"item": [
+						{
+							"name": "Create Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const title = pm.variables.replaceIn('{{$randomUserName}}')",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"title\": `POST ${title}`,",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.create.post.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.create.post.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.apisix}}/post",
+									"host": [
+										"{{base_url.apisix}}"
+									],
+									"path": [
+										"post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJSON = pm.response.json()",
+											"",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Save Latest Response\", function () {",
+											"    const post = responseJSON.results[0]",
+											"    if (post.id !== \"\") {",
+											"        pm.environment.set(\"backend.get.post.response-body.latest\", JSON.stringify(post))",
+											"    }",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.apisix}}/post",
+									"host": [
+										"{{base_url.apisix}}"
+									],
+									"path": [
+										"post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Post Detail",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.post.response-body.latest.id\", post.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.apisix}}/post/:id",
+									"host": [
+										"{{base_url.apisix}}"
+									],
+									"path": [
+										"post",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.post.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.post.response-body.latest.id\", post.id)",
+											"",
+											"",
+											"const title = pm.variables.replaceIn('{{$randomUserName}}')",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"title\": `POST ${title}`,",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.update.post.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.update.post.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.apisix}}/post/:id",
+									"host": [
+										"{{base_url.apisix}}"
+									],
+									"path": [
+										"post",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.post.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Post",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.post.response-body.latest.id\", post.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.apisix}}/post/:id",
+									"host": [
+										"{{base_url.apisix}}"
+									],
+									"path": [
+										"post",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.post.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "COMMENT",
+					"item": [
+						{
+							"name": "Create Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const post = JSON.parse(pm.environment.get(\"backend.get.post.response-body.latest\"))",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"post_id\": post.id,",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.create.comment.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.create.comment.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.apisix}}/comment",
+									"host": [
+										"{{base_url.apisix}}"
+									],
+									"path": [
+										"comment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"const responseJSON = pm.response.json()",
+											"",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Save Latest Response\", function () {",
+											"    const comment = responseJSON.results[0]",
+											"    if (comment.id !== \"\") {",
+											"        pm.environment.set(\"backend.get.comment.response-body.latest\", JSON.stringify(comment))",
+											"    }",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.apisix}}/comment",
+									"host": [
+										"{{base_url.apisix}}"
+									],
+									"path": [
+										"comment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List Comment Detail",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const comment = JSON.parse(pm.environment.get(\"backend.get.comment.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.comment.response-body.latest.id\", comment.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.apisix}}/comment/:id",
+									"host": [
+										"{{base_url.apisix}}"
+									],
+									"path": [
+										"comment",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.comment.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const comment = JSON.parse(pm.environment.get(\"backend.get.comment.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.comment.response-body.latest.id\", comment.id)",
+											"",
+											"",
+											"const body = pm.variables.replaceIn('{{$randomLoremText}}')",
+											"",
+											"const requestJSON = {",
+											"    \"body\": body",
+											"}",
+											"",
+											"pm.environment.set(\"backend.update.comment.request-body\", JSON.stringify(requestJSON))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{{backend.update.comment.request-body}}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url.apisix}}/comment/:id",
+									"host": [
+										"{{base_url.apisix}}"
+									],
+									"path": [
+										"comment",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.comment.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Comment",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const comment = JSON.parse(pm.environment.get(\"backend.get.comment.response-body.latest\"))",
+											"pm.environment.set(\"backend.get.comment.response-body.latest.id\", comment.id)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url.apisix}}/comment/:id",
+									"host": [
+										"{{base_url.apisix}}"
+									],
+									"path": [
+										"comment",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{backend.get.comment.response-body.latest.id}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Sign-In",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url.be}}/api/v1/auth/sign-in",
+							"host": [
+								"{{base_url.be}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"sign-in"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "APISIX",
+			"item": []
+		},
+		{
+			"name": "KONG",
+			"item": [
+				{
+					"name": "Sign-In",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{username}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url.kong}}/kong-bku-auth/bku/v1/web/auth/login",
+							"host": [
+								"{{base_url.kong}}"
+							],
+							"path": [
+								"kong-bku-auth",
+								"bku",
+								"v1",
+								"web",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TYK",
+			"item": []
+		}
+	]
+}

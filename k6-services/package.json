@@ -1,0 +1,16 @@
+{
+  "name": "k6-services",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "postman-to-k6 ./postman/postman_collection.json -e ./postman/postman_environment.json -o k6-script.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@apideck/postman-to-k6": "^1.8.8"
+  }
+}
